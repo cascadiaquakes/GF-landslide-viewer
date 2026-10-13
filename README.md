@@ -1,20 +1,25 @@
 # Cascadia Ground Failure Viewer
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18895836.svg)](https://doi.org/10.5281/zenodo.18895836)
+[![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
+
 A cloud-native geospatial application for exploring ground failure inventories across the Cascadia region.  
 Features interactive visualization, intelligent filtering, vector-tile-based rendering, and a fully serverless export pipeline capable of efficiently delivering large filtered datasets.
+
+**Live viewer:** https://ground-failure.cascadiaquakes.org
 
 ---
 
 ## Features
 
-### 🗺️ Interactive 2D Visualization
+### Interactive 2D Visualization
 - Vector tiles served via Martin (ECS Fargate)
 - MapLibre-based rendering with smooth zoom transitions
 - PGA contours overlay (USGS M9 scenario)
 - Detail-rich popups and overlays
 - Cascadia-bounded default view
 
-### 📊 Advanced Filters
+### Advanced Filters
 
 Data have been aligned for all datasets using the following fields:
 - **Categorical:** Material, Movement, Confidence  (computed from original datasets)
@@ -24,7 +29,7 @@ Data have been aligned for all datasets using the following fields:
 
 Detail of the preprocessing on the original data is available here: https://github.com/cascadiaquakes/cascadia-landslide-data
 
-### 📤 Data Export (Serverless)
+### Data Export (Serverless)
 - Fully asynchronous AWS-based pipeline
 - API Gateway → Lambda creates job + posts to SQS
 - Worker Lambda queries PostGIS and writes results to S3
@@ -323,14 +328,30 @@ British Columbia Geological Survey (Canada)
 
 ---
 
-## License
+## How to Cite
 
-Released under the **BSD 3-Clause License**.
+> Bachelot, L., Leshchinsky, B., Acharya, P., Olsen, M., Share, P.-E., & Marfo, W. (2026). *The Cascadia Region Earthquake Science Center (CRESCENT) Ground Failure Viewer* (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.18895836
+
+Please also credit the state and provincial geological surveys whose landslide inventories are shown (listed under Credits).
 
 ---
 
-## Support
+## License
 
-For technical questions or issues:  
-- Open an issue on GitHub  
-- Contact the CRESCENT development team  
+This project is licensed under the BSD 3-Clause License. See [LICENSE](LICENSE).
+
+---
+
+## Contacts
+
+- **Loïc Bachelot**, University of Oregon: [lbachelo@uoregon.edu](mailto:lbachelo@uoregon.edu)
+- **William Marfo**, University of California, Davis: [wmarfo@ucdavis.edu](mailto:wmarfo@ucdavis.edu)
+- **Amanda M. Thomas**, University of California, Davis: [amthom@ucdavis.edu](mailto:amthom@ucdavis.edu)
+
+For bugs or feature requests, please [open an issue](https://github.com/cascadiaquakes/GF-landslide-viewer/issues).
+
+---
+
+## Acknowledgments
+
+This project is supported by the National Science Foundation through the Cascadia Region Earthquake Science Center (CRESCENT), Cooperative Agreement EAR-2225286.
