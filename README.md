@@ -3,10 +3,15 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18895836.svg)](https://doi.org/10.5281/zenodo.18895836)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
 
-A cloud-native geospatial application for exploring ground failure inventories across the Cascadia region.  
-Features interactive visualization, intelligent filtering, vector-tile-based rendering, and a fully serverless export pipeline capable of efficiently delivering large filtered datasets.
+A cloud-native geospatial application for exploring ground failure inventories across the Cascadia region. Features interactive visualization, intelligent filtering, vector-tile-based rendering, and a fully serverless export pipeline capable of efficiently delivering large filtered datasets.
 
 **Live viewer:** https://ground-failure.cascadiaquakes.org
+
+---
+
+## Documentation
+
+The [Cascadia landslide book](https://cascadiaquakes.github.io/cascadia-landslide-book/) documents the ground failure data, and [cascadia-landslide-data](https://github.com/cascadiaquakes/cascadia-landslide-data) holds the preprocessing.
 
 ---
 
@@ -27,8 +32,6 @@ Data have been aligned for all datasets using the following fields:
 - Real-time updates reflected in tile requests  
 - Filter summary panel showing active constraints
 
-Detail of the preprocessing on the original data is available here: https://github.com/cascadiaquakes/cascadia-landslide-data
-
 ### Data Export (Serverless)
 - Fully asynchronous AWS-based pipeline
 - API Gateway → Lambda creates job + posts to SQS
@@ -36,6 +39,19 @@ Detail of the preprocessing on the original data is available here: https://gith
 - DynamoDB stores job progress + errors
 - Frontend polls job endpoint until download is ready
 - Supports GeoJSON export (optionally zipped)
+
+---
+
+## Data
+
+Landslide inventories from:
+
+- California Geological Survey (CGS)
+- Oregon Department of Geology and Mineral Industries (DOGAMI)
+- Washington Geological Survey (WGS)
+- British Columbia Geological Survey (Canada)
+
+The inventories are aligned to common fields (material, movement, confidence) and joined with PGA/PGV from the USGS M9 scenario and 30-year (1990-2019) annual average DAYMET precipitation. The preprocessing is documented in [cascadia-landslide-data](https://github.com/cascadiaquakes/cascadia-landslide-data).
 
 ---
 
@@ -61,7 +77,7 @@ Detail of the preprocessing on the original data is available here: https://gith
 
 ---
 
-## Quick Start
+## Running Locally
 
 ### Prerequisites
 - Node.js 18+
@@ -73,7 +89,7 @@ Detail of the preprocessing on the original data is available here: https://gith
 
 **1. Clone repository**
 ```bash
-git clone https://github.com/loicbachelot/GF-landslide-viewer.git
+git clone https://github.com/cascadiaquakes/GF-landslide-viewer.git
 cd GF-landslide-viewer
 ```
 
@@ -93,6 +109,19 @@ npm run dev
 **4. Open application**
 - Frontend: http://localhost:5173  
 - Tiles: http://localhost:3000  
+
+### Development Commands
+
+**Frontend:**
+```bash
+cd frontend
+npm run dev
+```
+
+**Worker Lambda test:**
+```bash
+python download_api/worker_main.py
+```
 
 ---
 
@@ -251,41 +280,21 @@ Returns download URL when ready.
 | rainfall | FLOAT | Annual rainfall estimate |
 
 (Accompanying tile-optimized tables/views are defined in `sql/setup_db.sql`.)
+
 We also store in separate tables the original data (e.g. WDNR, DOGAMI...) and use it for downloads.
----
-
-## Development
-
-### Frontend Development
-```bash
-cd frontend
-npm run dev
-```
-
-### CDK Deployment
-```bash
-cd aws_cdk
-cdk deploy
-```
-
-### Worker Lambda Testing
-```bash
-python download_api/worker_main.py
-```
 
 ---
 
 ## Deployment
 
-### Production Frontend Build
-```bash
-cd frontend
-npm run build
-```
-Deploy `dist/` to S3 + CloudFront.
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `ci.yml` | PRs to `master` or `dev` | Validates the frontend build and infrastructure |
+| `deploy-frontend-dev.yml` | Push to `dev` | Builds and deploys the dev frontend |
+| `deploy-frontend.yml` | Manual | Builds and deploys the production frontend |
+| `deploy-infra.yml` | Manual | Deploys the CDK stack (API Gateway, Lambdas, SQS, DynamoDB, ECS, RDS) |
 
-### Backend Deployment
-Handled entirely by CDK (API Gateway, Lambdas, SQS, DynamoDB, ECS, RDS).
+The frontend is served from S3 + CloudFront; everything else is managed by the CDK app in `aws_cdk/`. See [CICD_SETUP.md](CICD_SETUP.md) for the full pipeline.
 
 ---
 
@@ -312,19 +321,7 @@ Handled entirely by CDK (API Gateway, Lambdas, SQS, DynamoDB, ECS, RDS).
 - Vector tiles minimize data transfer  
 - Simplified geometry tables optimized for rendering  
 - Serverless download pipeline prevents API timeouts  
-- CloudFront caching improves global latency  
-
----
-
-## Credits
-
-**Developed by:** CRESCENT Dev Team (Loïc, William and Amanda) based on the work of Prasaya Acharya
-**Funded by:** U.S. National Science Foundation  
-**Landslide Data:**  
-California Geological Survey (CGS)  
-Oregon Department of Geology and Mineral Industries (DOGAMI)  
-Washington Geological Survey (WGS)  
-British Columbia Geological Survey (Canada)
+- CloudFront caching improves global latency
 
 ---
 
@@ -332,7 +329,7 @@ British Columbia Geological Survey (Canada)
 
 > Bachelot, L., Leshchinsky, B., Acharya, P., Olsen, M., Share, P.-E., & Marfo, W. (2026). *The Cascadia Region Earthquake Science Center (CRESCENT) Ground Failure Viewer* (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.18895836
 
-Please also credit the state and provincial geological surveys whose landslide inventories are shown (listed under Credits).
+Please also credit the state and provincial geological surveys whose landslide inventories are shown (listed under [Data](#data)).
 
 ---
 
@@ -354,4 +351,12 @@ For bugs or feature requests, please [open an issue](https://github.com/cascadia
 
 ## Acknowledgments
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/cascadiaquakes/.github/main/assets/crescent-logo.png" alt="CRESCENT" height="70">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/cascadiaquakes/.github/main/assets/nsf-logo.png" alt="U.S. National Science Foundation" height="70">
+</p>
+
 This project is supported by the National Science Foundation through the Cascadia Region Earthquake Science Center (CRESCENT), Cooperative Agreement EAR-2225286.
+
+Developed by the CRESCENT development team based on the work of Prasaya Acharya. Landslide data courtesy of the geological surveys listed under [Data](#data).
