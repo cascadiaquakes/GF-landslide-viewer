@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "The Cascadia Region Earthquake Science Center (CRESCENT) Ground Failure Viewer"
+version: "1.0.0"
+doi: 10.5281/zenodo.18895836
+date-released: 2026-03-06
+license: BSD-3-Clause
+repository-code: "https://github.com/cascadiaquakes/GF-landslide-viewer"
+url: "https://ground-failure.cascadiaquakes.org"
+authors:
+  - family-names: Bachelot
+    given-names: Loïc
+    orcid: "https://orcid.org/0000-0003-0711-8581"
+  - family-names: Leshchinsky
+    given-names: Ben
+  - family-names: Acharya
+    given-names: Prasaya
+  - family-names: Olsen
+    given-names: Michael
+  - family-names: Share
+    given-names: Pieter-Ewald
+  - family-names: Marfo
+    given-names: William
+    orcid: "https://orcid.org/0009-0003-0631-2750"
